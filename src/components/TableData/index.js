@@ -1,37 +1,32 @@
 import React, { Component } from 'react'
 import "./styles.css"
+import PopulateTable from './populateTable';
 
 class TableData extends Component {
 	constructor(props){
 		super(props);
 		this.state={
-			finalDataList:this.props.dataList
+			finalDataList:JSON.parse(JSON.stringify(this.props.dataList)),
 		}
     }
     
 	componentWillUpdate(nextProps){
-		if(nextProps.dataList!==this.props.dataList){
+		if(this.state.finalDataList && nextProps.dataList!==this.state.finalDataList){
 			this.setState({finalDataList: nextProps.dataList});
 		}
 	}
-	
-    render() {
+    render() {		
 		return (
-            <table className="table">
-                <tbody>{
-				Object.keys(this.state.finalDataList).map((key,i)=>{
-					let _this=this;
-            return (
-				<tr>
-					<td key={i}>{Object.keys(_this.state.finalDataList)[i]}</td>
-					<td key={i+1}>{this.state.finalDataList[key]}</td>
-				</tr>
-              )
-			})
-				}
-                </tbody>
-            </table>
+		<div>
+           <div className="BorderBox">
+		   {this.state.finalDataList && this.state.finalDataList.map((items,index)=>{
+						return <PopulateTable  items={items} isDataCopied={this.props.isDataCopied} isReadOnly={this.props.isReadOnly} onUpdateOriginalFields={this.props.onUpdateOriginalFields} key={index}/>
+						})
+					}
+		   </div>                
+        </div>
         )
 	}
 }
 export default TableData
+				
